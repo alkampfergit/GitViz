@@ -50,6 +50,7 @@
         </Grid.RowDefinitions>
         <DockPanel Grid.Row="0" Background="WhiteSmoke">
             <Separator DockPanel.Dock="Bottom" />
+            <CheckBox DockPanel.Dock="Left" Content="Visualize Deleted" VerticalAlignment="Center" IsChecked="{Binding VisualizeUnreachable}"/>
             <TextBlock DockPanel.Dock="Left" VerticalAlignment="Center" Padding="10,0,0,0">Local Repo Path:</TextBlock>
             <TextBox Padding="5" Text="{Binding Path=RepositoryPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="10" />
         </DockPanel>
