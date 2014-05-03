@@ -8,7 +8,7 @@ namespace GitViz.Logic
 {
     public class LogParser
     {
-        public readonly string ExpectedOutputFormat = "%ct %H %P %d";
+        public readonly string ExpectedOutputFormat = "%ct %H %P %d %s";
 
         public IEnumerable<Commit> ParseCommits(StreamReader gitLogOutput)
         {
@@ -21,7 +21,7 @@ namespace GitViz.Logic
             gitLogOutput.Close();
         }
 
-        static readonly Regex ParseCommitRegex = new Regex(@"^(?<commitDate>\d*) (?<hash>\w{7,40})(?<parentHashes>( \w{7,40})+)?([ ]+\((?<refs>.*?)\))?");
+        static readonly Regex ParseCommitRegex = new Regex(@"^(?<commitDate>\d*) (?<hash>\w{7,40})(?<parentHashes>( \w{7,40})+)?([ ]+\((?<refs>.*?)\))? ((?<subject>.*))?");
 
         internal static Commit ParseCommit(string logOutputLine)
         {
@@ -41,12 +41,17 @@ namespace GitViz.Logic
                     .ToArray()
                 : null;
 
+            var subject = match.Groups["subject"].Success
+                ? match.Groups["subject"].Value
+                : String.Empty;
+
             return new Commit
             {
                 Hash = match.Groups["hash"].Value,
                 CommitDate = commitDate,
                 ParentHashes = parentHashes,
-                Refs = refs
+                Refs = refs,
+                Subject = subject,
             };
         }
     }

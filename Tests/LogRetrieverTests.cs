@@ -24,6 +24,23 @@ namespace GitViz.Tests
         }
 
         [Test]
+        public void ShouldReturnFirstLineOfCommitMessage()
+        {
+            using (var tempFolder = new TemporaryFolder())
+            {
+                var tempRepository = new TemporaryRepository(tempFolder);
+                tempRepository.RunCommand("init");
+                tempRepository.TouchFileAndCommit();
+
+                var executor = new GitCommandExecutor(tempFolder.Path);
+                var log = new LogRetriever(executor).GetRecentCommits().ToArray();
+
+                Assert.AreEqual(1, log.Length);
+                Assert.AreEqual("commit message", log[0].Subject);
+            }
+        }
+
+        [Test]
         public void ShouldReturnSingleRecentCommitWithHashButNoParents()
         {
             using (var tempFolder = new TemporaryFolder())

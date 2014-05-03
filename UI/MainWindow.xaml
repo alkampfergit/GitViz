@@ -11,7 +11,10 @@
     <Window.Resources>
         <DataTemplate x:Key="CommitTemplate" DataType="{x:Type logic:Vertex}">
             <Border x:Name="Border" BorderBrush="DarkSlateGray" Background="#daf5dd" BorderThickness="3" CornerRadius="10,10,10,10" Padding="10">
-                <TextBlock Text="{Binding Path=Commit.ShortHash, Mode=OneWay}" Foreground="Black" FontSize="14pt" FontFamily="Consolas" />
+                <StackPanel>
+                    <TextBlock Text="{Binding Path=Commit.ShortHash, Mode=OneWay}" Foreground="Black" FontSize="14pt" FontFamily="Consolas" />
+                    <TextBlock Text="{Binding Path=Commit.Subject, Mode=OneWay}" Foreground="Black" FontSize="8pt" FontFamily="Consolas" />
+                </StackPanel>
             </Border>
             <DataTemplate.Triggers>
                 <DataTrigger Binding="{Binding Path=Orphan}" Value="true">

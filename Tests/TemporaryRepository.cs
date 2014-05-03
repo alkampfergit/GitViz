@@ -27,7 +27,7 @@ namespace GitViz.Tests
             File.WriteAllText(filePath, DateTimeOffset.UtcNow.Ticks.ToString(CultureInfo.InvariantCulture));
 
             RunCommand("add -A");
-            RunCommand("commit -m \"commit\"");
+            RunCommand("commit -m \"commit message\"");
         }
     }
 }
