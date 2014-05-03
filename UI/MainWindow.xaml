@@ -9,11 +9,14 @@
         <logic:ViewModel />
     </Window.DataContext>
     <Window.Resources>
+        
         <DataTemplate x:Key="CommitTemplate" DataType="{x:Type logic:Vertex}">
             <Border x:Name="Border" BorderBrush="DarkSlateGray" Background="#daf5dd" BorderThickness="3" CornerRadius="10,10,10,10" Padding="10">
                 <StackPanel>
                     <TextBlock Text="{Binding Path=Commit.ShortHash, Mode=OneWay}" Foreground="Black" FontSize="14pt" FontFamily="Consolas" />
-                    <TextBlock Text="{Binding Path=Commit.Subject, Mode=OneWay}" Foreground="Black" FontSize="8pt" FontFamily="Consolas" />
+                    <TextBlock Text="{Binding Path=Commit.Subject, Mode=OneWay}" 
+                               Visibility="{Binding Path=DataContext.VisualizeComments, RelativeSource={RelativeSource AncestorType=Window},  Converter={logic:BooleanToVisibilityConverter}}"
+                               Foreground="Black" FontSize="8pt" FontFamily="Consolas" />
                 </StackPanel>
             </Border>
             <DataTemplate.Triggers>
@@ -53,7 +56,10 @@
         </Grid.RowDefinitions>
         <DockPanel Grid.Row="0" Background="WhiteSmoke">
             <Separator DockPanel.Dock="Bottom" />
-            <CheckBox DockPanel.Dock="Left" Content="Visualize Deleted" VerticalAlignment="Center" IsChecked="{Binding VisualizeUnreachable}"/>
+            <StackPanel DockPanel.Dock="Left" VerticalAlignment="Center">
+               <CheckBox Content="Visualize Deleted" VerticalAlignment="Center" IsChecked="{Binding VisualizeUnreachable}"/>
+               <CheckBox Margin="0,2,0,0" Content="Show Comments" VerticalAlignment="Center" IsChecked="{Binding VisualizeComments}"/>
+            </StackPanel>
             <TextBlock DockPanel.Dock="Left" VerticalAlignment="Center" Padding="10,0,0,0">Local Repo Path:</TextBlock>
             <TextBox Padding="5" Text="{Binding Path=RepositoryPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="10" />
         </DockPanel>

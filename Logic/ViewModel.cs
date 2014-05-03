@@ -138,6 +138,18 @@ namespace GitViz.Logic
         }
         private Boolean _visualizeUnreachable;
 
+        public Boolean VisualizeComments
+        {
+            get { return _visualizeComments; }
+            set
+            {
+                _visualizeComments = value;
+                if (logRetriever != null) RefreshGraph(logRetriever); //TODO: Refactor.
+                OnPropertyChanged("VisualizeComments");
+            }
+        }
+        private Boolean _visualizeComments;
+
         static bool IsValidGitRepository(string path)
         {
             return !string.IsNullOrEmpty(path)
