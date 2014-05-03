@@ -21,7 +21,7 @@ namespace GitViz.Logic
             gitLogOutput.Close();
         }
 
-        static readonly Regex ParseCommitRegex = new Regex(@"^(?<commitDate>\d*) (?<hash>\w{7,40})(?<parentHashes>( \w{7,40})+)?([ ]+\((?<refs>.*?)\))? ((?<subject>.*))?");
+        static readonly Regex ParseCommitRegex = new Regex(@"^(?<commitDate>\d*) (?<hash>\w{7,40})(?<parentHashes>( \w{7,40})+)?([ ]+\((?<refs>.*?)\))?\s?((?<subject>.*))?");
 
         internal static Commit ParseCommit(string logOutputLine)
         {
@@ -43,7 +43,7 @@ namespace GitViz.Logic
 
             var subject = match.Groups["subject"].Success
                 ? match.Groups["subject"].Value
-                : String.Empty;
+                : null;
 
             return new Commit
             {
