@@ -20,7 +20,7 @@ namespace GitViz.Logic
             _fsckParser = fsckParser ?? new FsckParser();
         }
 
-        public IEnumerable<Commit> GetRecentCommits(int maxResults = 20)
+        public IEnumerable<Commit> GetRecentCommits(int maxResults)
         {
             var command = string.Format("log --all --format=\"{0}\" -{1}", _logParser.ExpectedOutputFormat, maxResults);
             var log = _executor.ExecuteAndGetOutputStream(command);
