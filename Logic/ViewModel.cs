@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using GitViz.Logic.Annotations;
 using System;
 using System.Text.RegularExpressions;
+using GitViz.Logic.Mvvm.Utils;
 
 namespace GitViz.Logic
 {
@@ -19,10 +20,15 @@ namespace GitViz.Logic
 
         GitCommandExecutor commandExecutor;
         LogRetriever logRetriever;
+        IWpfSystem _wpfSystem;
 
+        /// <summary>
+        /// TODO: need to inizialize everything with castle or other tools.
+        /// </summary>
         public ViewModel()
         {
             _numOfCommitsToShow = 20;
+            _wpfSystem = new WpfSystem();
         }
 
         public string WindowTitle
@@ -220,5 +226,19 @@ namespace GitViz.Logic
             var handler = PropertyChanged;
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        #region Commands 
+
+        public void ExecuteSelectFolder(Object paramter) 
+        {
+            var folder = _wpfSystem.UserChooseFolder(RepositoryPath);
+            if (!String.IsNullOrEmpty(folder)) 
+            {
+                RepositoryPath = folder;
+            }
+        }
+
+
+        #endregion 
     }
 }
