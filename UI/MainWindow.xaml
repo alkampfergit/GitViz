@@ -4,12 +4,12 @@
         xmlns:logic="clr-namespace:GitViz.Logic;assembly=GitViz.Logic"
         xmlns:ui="clr-namespace:UI"
         xmlns:graphsharp="clr-namespace:GraphSharp.Controls;assembly=GraphSharp.Controls"
-        Title="Readify GitViz (Alpha)" Height="600" Width="400" Icon="readify.ico">
+        Title="{Binding WindowTitle, Mode=OneWay}" Height="600" Width="400" Icon="readify.ico">
     <Window.DataContext>
         <logic:ViewModel />
     </Window.DataContext>
     <Window.Resources>
-        
+
         <DataTemplate x:Key="CommitTemplate" DataType="{x:Type logic:Vertex}">
             <Border x:Name="Border" BorderBrush="DarkSlateGray" Background="#daf5dd" BorderThickness="3" CornerRadius="10,10,10,10" Padding="10">
                 <StackPanel>
@@ -27,11 +27,21 @@
         </DataTemplate>
         <DataTemplate x:Key="ReferenceTemplate" DataType="{x:Type logic:Vertex}">
             <Border x:Name="Border" BorderBrush="DarkSlateGray" Background="LightGray" BorderThickness="3" Padding="10">
-                <TextBlock Text="{Binding Path=Reference.Name, Mode=OneWay}" Foreground="Black" FontSize="14pt" FontFamily="Consolas" />
+                <TextBlock x:Name="Text" Text="{Binding Path=Reference.Name, Mode=OneWay}" Foreground="Red" FontSize="14pt" FontFamily="Consolas" />
             </Border>
             <DataTemplate.Triggers>
                 <DataTrigger Binding="{Binding Path=Reference.IsActive}" Value="true">
                     <Setter TargetName="Border" Property="Background" Value="Yellow" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=Reference.IsHead}" Value="true">
+                    <Setter TargetName="Border" Property="Background" Value="IndianRed" />
+                    <Setter TargetName="Text" Property="Foreground" Value="Black" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=Reference.IsTag}" Value="true">
+                    <Setter TargetName="Text" Property="Foreground" Value="Blue" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=Reference.IsRemote}" Value="true">
+                    <Setter TargetName="Text" Property="Foreground" Value="Green" />
                 </DataTrigger>
             </DataTemplate.Triggers>
         </DataTemplate>
@@ -54,24 +64,26 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+        
         <DockPanel Grid.Row="0" Background="WhiteSmoke">
             <Separator DockPanel.Dock="Bottom" />
-            <DockPanel VerticalAlignment="Center" DockPanel.Dock="Bottom">
-                <TextBlock DockPanel.Dock="Left" VerticalAlignment="Center" Padding="10,0,0,0">Local Repo Path:</TextBlock>
-                <TextBox Padding="5" Text="{Binding Path=RepositoryPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5" />
-            </DockPanel>
+            <DockPanel Background="WhiteSmoke" LastChildFill="True" DockPanel.Dock="Bottom">
 
+                <TextBlock DockPanel.Dock="Left" VerticalAlignment="Center" Padding="8,0,0,0">Local Repo Path:</TextBlock>
+                <Button x:Name="BtnOpenRepository" Click="BtnOpenRepository_OnClick" Width="30" Height="30" DockPanel.Dock="Right" VerticalAlignment="Bottom" Margin="4, 2, 10, 2">...</Button>
+                <TextBox x:Name="TxtRepositoryPath" Padding="5" Text="{Binding Path=RepositoryPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="10, 2, 0, 2" />
+            </DockPanel>
             <StackPanel DockPanel.Dock="Left" VerticalAlignment="Center" Margin="5" >
-               <CheckBox Content="Visualize Deleted" VerticalAlignment="Center" IsChecked="{Binding VisualizeUnreachable}"/>
-               <CheckBox Margin="0,2,0,0" Content="Show Comments" VerticalAlignment="Center" IsChecked="{Binding VisualizeComments}"/>
+                <CheckBox Content="Visualize Deleted" VerticalAlignment="Center" IsChecked="{Binding VisualizeUnreachable}"/>
+                <CheckBox Margin="0,2,0,0" Content="Show Comments" VerticalAlignment="Center" IsChecked="{Binding VisualizeComments}"/>
             </StackPanel>
 
-            <StackPanel DockPanel.Dock="Right" VerticalAlignment="Center" Orientation="Horizontal" Margin="5">
+            <StackPanel DockPanel.Dock="Left" VerticalAlignment="Center" Orientation="Horizontal" Margin="5">
                 <Label Content="N° Commits to show" />
                 <TextBox VerticalContentAlignment="Center" Width="30" Text="{Binding NumOfCommitsToShow, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
-  
-             </DockPanel>
+
+        </DockPanel>
         <Image Source="readify.png" Grid.Row="1" Stretch="None" HorizontalAlignment="Right" VerticalAlignment="Bottom" Opacity="0.5" Margin="30"></Image>
         <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <ui:CommitGraphLayout

@@ -25,6 +25,17 @@ namespace GitViz.Logic
             _numOfCommitsToShow = 20;
         }
 
+        public string WindowTitle
+        {
+            get
+            {
+                return "Readify GitViz (Alpha)"
+                    + (string.IsNullOrWhiteSpace(_repositoryPath)
+                        ? string.Empty
+                        : " - " + Path.GetFileName(_repositoryPath));
+            }
+        }
+
         public string RepositoryPath
         {
             get { return _repositoryPath; }
@@ -40,6 +51,7 @@ namespace GitViz.Logic
 
                     _watcher = new RepositoryWatcher(_repositoryPath, IsBareGitRepository(_repositoryPath));
                     _watcher.ChangeDetected += (sender, args) => RefreshGraph(logRetriever);
+					OnPropertyChanged("WindowTitle");
                 }
                 else
                 {
@@ -91,13 +103,26 @@ namespace GitViz.Logic
             }
 
             // Add all the vertices
+            var headVertex = new Vertex(new Reference
+            {
+               Name = Reference.HEAD,
+            });
+
             foreach (var commitVertex in commitVertices)
             {
                 graph.AddVertex(commitVertex);
 
                 if (commitVertex.Commit.Refs == null) continue;
+                var isHeadHere = false;
+                var isHeadSet = false;
                 foreach (var refName in commitVertex.Commit.Refs)
                 {
+                    if (refName == Reference.HEAD)
+                    {
+                        isHeadHere = true;
+                        graph.AddVertex(headVertex);
+                        continue;
+                    }
                     var refVertex = new Vertex(new Reference
                     {
                         Name = refName,
@@ -105,7 +130,12 @@ namespace GitViz.Logic
                     });
                     graph.AddVertex(refVertex);
                     graph.AddEdge(new CommitEdge(refVertex, commitVertex));
+                    if (!refVertex.Reference.IsActive) continue;
+                    isHeadSet = true;
+                    graph.AddEdge(new CommitEdge(headVertex, refVertex));
                 }
+                if (isHeadHere && !isHeadSet)
+                    graph.AddEdge(new CommitEdge(headVertex, commitVertex));
             }
 
             // Add all the edges
