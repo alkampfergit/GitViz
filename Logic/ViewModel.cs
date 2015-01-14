@@ -42,6 +42,7 @@ namespace GitViz.Logic
             }
         }
 
+        public bool IsNewRepository { get; set; }
         public string RepositoryPath
         {
             get { return _repositoryPath; }
@@ -54,7 +55,7 @@ namespace GitViz.Logic
                      logRetriever = new LogRetriever(commandExecutor, _parser);
 
                     RefreshGraph(logRetriever);
-
+                    IsNewRepository = true;
                     _watcher = new RepositoryWatcher(_repositoryPath, IsBareGitRepository(_repositoryPath));
                     _watcher.ChangeDetected += (sender, args) => RefreshGraph(logRetriever);
 					OnPropertyChanged("WindowTitle");
@@ -68,6 +69,7 @@ namespace GitViz.Logic
                         _watcher = null;
                     }
                 }
+                OnPropertyChanged("RepositoryPath");
             }
         }
 
@@ -82,9 +84,9 @@ namespace GitViz.Logic
             if (VisualizeUnreachable)
             {
                 unreachableCommits = logRetriever
-                    .GetSpecificCommits(unreachableHashes)
-                    .Where(c => !reachableCommitHashes.Contains(c.Hash))
-                    .ToArray();
+                .GetSpecificCommits(unreachableHashes)
+                .Where(c => !reachableCommitHashes.Contains(c.Hash))
+                .ToArray();
             }
 
             Graph = GenerateGraphFromCommits(commits, activeRefName, unreachableCommits);

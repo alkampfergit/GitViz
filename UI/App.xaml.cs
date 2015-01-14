@@ -1,4 +1,5 @@
-﻿using System;
+using GitViz.Logic;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -15,9 +16,12 @@ namespace UI
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            var wnd = new MainWindow();
+            var vm = new ViewModel();
+
             if (e.Args.Length == 1)
-                wnd.TxtRepositoryPath.Text = e.Args[0];
+                vm.RepositoryPath = e.Args[0];
+            var wnd = new MainWindow();
+            wnd.DataContext = vm;
             wnd.Show();
         }
 
