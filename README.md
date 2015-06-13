@@ -32,3 +32,5 @@ This is not a day-to-day visualizing tool for big, active repositories. It's opt
 ### How it works
 
 Shells out to `git.exe`, and then renders it with the excellent [GraphSharp](http://graphsharp.codeplex.com).
+
+![](https://gianmariaricci.visualstudio.com/DefaultCollection/_apis/public/build/definitions/7f6013a5-ac4a-4d73-b500-30f627fe960d/58/badge)
