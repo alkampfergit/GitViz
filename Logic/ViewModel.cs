@@ -48,7 +48,7 @@ namespace GitViz.Logic
             get { return _repositoryPath; }
             set
             {
-                _repositoryPath = value;
+                _repositoryPath = value.Trim();
                 if (IsValidGitRepository(_repositoryPath))
                 {
                      commandExecutor = new GitCommandExecutor(_repositoryPath);
