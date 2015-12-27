@@ -15,10 +15,13 @@
         <DataTemplate x:Key="CommitTemplate" DataType="{x:Type logic:Vertex}">
             <Border x:Name="Border" BorderBrush="DarkSlateGray" Background="#daf5dd" BorderThickness="3" CornerRadius="10,10,10,10" Padding="10">
                 <StackPanel>
-                <TextBlock Text="{Binding Path=Commit.ShortHash, Mode=OneWay}" Foreground="Black" FontSize="14pt" FontFamily="Consolas" />
-                    <TextBlock Text="{Binding Path=Commit.Subject, Mode=OneWay}" 
-                               Visibility="{Binding Path=DataContext.VisualizeComments, RelativeSource={RelativeSource AncestorType=Window},  Converter={logic:BooleanToVisibilityConverter}}"
-                               Foreground="Black" FontSize="8pt" FontFamily="Consolas" />
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Path=Commit.ShortHash, Mode=OneWay}" VerticalAlignment="Center" Foreground="Black" FontSize="14pt" FontFamily="Consolas"/>
+                        <TextBlock Text="{Binding Path=Commit.CommitDate, StringFormat=dd/MM/yy HH:mm, Mode=OneWay}" Visibility="{Binding Path=DataContext.VisualizeCommitDate, RelativeSource={RelativeSource AncestorType=Window},
+                            Converter={logic:BooleanToVisibilityConverter}}" Margin="10,0,0,0" VerticalAlignment="Center" Foreground="Black" FontSize="8pt" FontFamily="Consolas" />
+                    </StackPanel>
+                    <TextBlock Text="{Binding Path=Commit.Subject, Mode=OneWay}" Visibility="{Binding Path=DataContext.VisualizeComments, RelativeSource={RelativeSource AncestorType=Window},
+                        Converter={logic:BooleanToVisibilityConverter}}" Foreground="Black" FontSize="8pt" FontFamily="Consolas" />
                 </StackPanel>
             </Border>
             <DataTemplate.Triggers>
@@ -82,7 +85,8 @@
             </DockPanel>
             <StackPanel DockPanel.Dock="Left" VerticalAlignment="Center" Margin="5" >
                 <CheckBox Content="Visualize Deleted" VerticalAlignment="Center" IsChecked="{Binding VisualizeUnreachable}"/>
-                <CheckBox Margin="0,2,0,0" Content="Show Comments" VerticalAlignment="Center" IsChecked="{Binding VisualizeComments}"/>
+                <CheckBox Content="Show Comments" VerticalAlignment="Center" IsChecked="{Binding VisualizeComments}"/>
+                <CheckBox Content="Show Commit Date" VerticalAlignment="Center" IsChecked="{Binding VisualizeCommitDate}"/>
             </StackPanel>
 
             <StackPanel DockPanel.Dock="Left" VerticalAlignment="Center" Orientation="Horizontal" Margin="5">

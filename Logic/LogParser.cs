@@ -48,11 +48,17 @@ namespace GitViz.Logic
             return new Commit
             {
                 Hash = match.Groups["hash"].Value,
-                CommitDate = commitDate,
+                CommitDate = ConvertUnixTimeToLocalTime(commitDate),
                 ParentHashes = parentHashes,
                 Refs = refs,
                 Subject = subject,
             };
+        }
+
+        private static DateTime ConvertUnixTimeToLocalTime(long unixTime)
+        {
+            var dateTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            return dateTime.AddSeconds(unixTime).ToLocalTime();
         }
     }
 }

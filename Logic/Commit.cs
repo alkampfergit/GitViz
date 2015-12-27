@@ -1,4 +1,6 @@
-﻿namespace GitViz.Logic
+﻿using System;
+
+namespace GitViz.Logic
 {
     public class Commit
     {
@@ -8,7 +10,7 @@
 
         public string[] Refs { get; set; }
 
-        public long CommitDate { get; set; }
+        public DateTime CommitDate { get; set; }
 
         public string Subject { get; set; }
 
