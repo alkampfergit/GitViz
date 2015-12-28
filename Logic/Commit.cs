@@ -10,6 +10,8 @@ namespace GitViz.Logic
 
         public string[] Refs { get; set; }
 
+        public string CommitterEmail { get; set; }
+
         public DateTime CommitDate { get; set; }
 
         public string Subject { get; set; }

@@ -218,6 +218,19 @@ namespace GitViz.Logic
 
         private bool _visualizeCommitDate;
 
+        public bool VisualizeCommitterEmail
+        {
+            get { return _visualizeCommitterEmail; }
+            set
+            {
+                _visualizeCommitterEmail = value;
+                if (logRetriever != null) RefreshGraph(logRetriever); //TODO: Refactor.
+                OnPropertyChanged("VisualizeCommitterEmail");
+            }
+        }
+
+        private bool _visualizeCommitterEmail;
+
         static bool IsValidGitRepository(string path)
         {
             return !string.IsNullOrEmpty(path)
