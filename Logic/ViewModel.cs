@@ -48,7 +48,7 @@ namespace GitViz.Logic
             get { return _repositoryPath; }
             set
             {
-                _repositoryPath = value;
+                _repositoryPath = value.Trim();
                 if (IsValidGitRepository(_repositoryPath))
                 {
                      commandExecutor = new GitCommandExecutor(_repositoryPath);
@@ -204,6 +204,32 @@ namespace GitViz.Logic
             }
         }
         private Int32 _numOfCommitsToShow;
+
+        public bool VisualizeCommitDate
+        {
+            get { return _visualizeCommitDate; }
+            set
+            {
+                _visualizeCommitDate = value;
+                if (logRetriever != null) RefreshGraph(logRetriever); //TODO: Refactor.
+                OnPropertyChanged("VisualizeCommitDate");
+            }
+        }
+
+        private bool _visualizeCommitDate;
+
+        public bool VisualizeCommitterEmail
+        {
+            get { return _visualizeCommitterEmail; }
+            set
+            {
+                _visualizeCommitterEmail = value;
+                if (logRetriever != null) RefreshGraph(logRetriever); //TODO: Refactor.
+                OnPropertyChanged("VisualizeCommitterEmail");
+            }
+        }
+
+        private bool _visualizeCommitterEmail;
 
         static bool IsValidGitRepository(string path)
         {
