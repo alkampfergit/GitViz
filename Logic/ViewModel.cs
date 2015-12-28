@@ -51,14 +51,14 @@ namespace GitViz.Logic
                 _repositoryPath = value.Trim();
                 if (IsValidGitRepository(_repositoryPath))
                 {
-                    commandExecutor = new GitCommandExecutor(_repositoryPath);
-                    logRetriever = new LogRetriever(commandExecutor, _parser);
+                     commandExecutor = new GitCommandExecutor(_repositoryPath);
+                     logRetriever = new LogRetriever(commandExecutor, _parser);
 
                     RefreshGraph(logRetriever);
                     IsNewRepository = true;
                     _watcher = new RepositoryWatcher(_repositoryPath, IsBareGitRepository(_repositoryPath));
                     _watcher.ChangeDetected += (sender, args) => RefreshGraph(logRetriever);
-                    OnPropertyChanged("WindowTitle");
+					OnPropertyChanged("WindowTitle");
                 }
                 else
                 {
@@ -105,15 +105,15 @@ namespace GitViz.Logic
                 .ToList();
             }
             else
-            {
-                commitVertices = commits.Select(c => new Vertex(c))
-                    .ToList();
+            { 
+            commitVertices = commits.Select(c => new Vertex(c))
+                .ToList();
             }
 
             // Add all the vertices
             var headVertex = new Vertex(new Reference
             {
-                Name = Reference.HEAD,
+               Name = Reference.HEAD,
             });
 
             foreach (var commitVertex in commitVertices)
@@ -162,7 +162,7 @@ namespace GitViz.Logic
         public CommitGraph Graph
         {
             get { return _graph; }
-            set
+            set 
             {
                 _graph = value;
                 OnPropertyChanged("Graph");
@@ -226,9 +226,9 @@ namespace GitViz.Logic
                  IsBareGitRepository(path));
         }
 
-        static Boolean IsBareGitRepository(String path)
+        static Boolean IsBareGitRepository(String path) 
         {
-            String configFileForBareRepository = Path.Combine(path, "config");
+            String configFileForBareRepository = Path.Combine(path, "config"); 
             return File.Exists(configFileForBareRepository) &&
                   Regex.IsMatch(File.ReadAllText(configFileForBareRepository), @"bare\s*=\s*true", RegexOptions.IgnoreCase);
         }
@@ -242,18 +242,18 @@ namespace GitViz.Logic
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        #region Commands
+        #region Commands 
 
-        public void ExecuteSelectFolder(Object paramter)
+        public void ExecuteSelectFolder(Object paramter) 
         {
             var folder = _wpfSystem.UserChooseFolder(RepositoryPath);
-            if (!String.IsNullOrEmpty(folder))
+            if (!String.IsNullOrEmpty(folder)) 
             {
                 RepositoryPath = folder;
             }
         }
 
 
-        #endregion
+        #endregion 
     }
 }
